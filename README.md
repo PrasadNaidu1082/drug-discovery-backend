@@ -9,7 +9,7 @@ It allows users to **upload a CSV file**, store it in **Amazon S3 and DynamoDB**
 
 The architecture follows a **serverless approach** using AWS services:
 
-![Architecture Diagram](images/architecture.png)
+![Architecture Diagram](/analytics-service-architecture.drawio.png)
 
 ### Key Components:
 - **API Gateway** - Exposes RESTful API endpoints.

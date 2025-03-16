@@ -31,7 +31,7 @@ The architecture follows a **serverless approach** using AWS services:
 
 ## API Endpoints
 
-### **1 Upload CSV File**
+### **1. Upload CSV File**
 
 Uploads a CSV file containing **drug discovery data**.
 
@@ -53,7 +53,7 @@ curl -X POST "https://your-api-gateway-url/prod/upload" \
   "file": "drug_data_xxx.json"
 }
 ```
-### **2 Retrieve Stored Data**
+### **2. Retrieve Stored Data**
 
 Retrieves the stored drug discovery data in JSON format.
 

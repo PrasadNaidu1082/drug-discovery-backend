@@ -13,4 +13,3 @@ variable "dynamodb_table_name" {}
 output "dynamodb_table_name" {
   value = aws_dynamodb_table.drug_discovery.name
 }
-

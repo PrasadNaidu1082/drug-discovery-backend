@@ -14,6 +14,7 @@ This project provides a **RESTful API** built using **AWS Lambda & API Gateway**
 
 ## 🏗️ Architecture
 
+![Architecture Diagram](/analytics-service-architecture.drawio.png)
 1. **User uploads a CSV file** via API (POST request).  
 2. The **Lambda function decodes and processes the file**, validating its structure.  
 3. The **data is stored in S3 (as JSON) and DynamoDB** (for quick retrieval).  

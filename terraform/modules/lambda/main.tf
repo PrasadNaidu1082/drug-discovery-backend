@@ -33,12 +33,25 @@ resource "aws_iam_policy" "lambda_policy" {
 EOF
 }
 
+# Attach IAM Policy to the Role
+resource "aws_iam_role_policy_attachment" "lambda_role_policy_attachment" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.lambda_policy.arn
+}
+
 resource "aws_lambda_function" "upload_lambda" {
   function_name = var.upload_lambda_name
   role          = aws_iam_role.lambda_role.arn
   runtime       = "python3.8"
   handler       = "upload_csv_lambda.lambda_handler"
-  filename      = "lambdas/upload_csv_lambda.zip"
+  filename      = "../lambdas/upload_csv_lambda.zip"
+
+  environment {
+    variables = {
+      BUCKET_NAME    = var.bucket_name
+      DYNAMODB_TABLE = var.dynamodb_table_name
+    }
+  }
 }
 
 resource "aws_lambda_function" "retrieve_lambda" {
@@ -46,12 +59,17 @@ resource "aws_lambda_function" "retrieve_lambda" {
   role          = aws_iam_role.lambda_role.arn
   runtime       = "python3.8"
   handler       = "retrieve_data_lambda.lambda_handler"
-  filename      = "lambdas/retrieve_data_lambda.zip"
+  filename      = "../lambdas/retrieve_data_lambda.zip"
+
+  environment {
+    variables = {
+      DYNAMODB_TABLE = var.dynamodb_table_name
+    }
+  }
 }
 
 variable "upload_lambda_name" {}
 variable "retrieve_lambda_name" {}
-variable "lambda_role_name" {}
 variable "bucket_name" {}
 variable "dynamodb_table_name" {}
 
@@ -62,4 +80,3 @@ output "upload_lambda_arn" {
 output "retrieve_lambda_arn" {
   value = aws_lambda_function.retrieve_lambda.arn
 }
-

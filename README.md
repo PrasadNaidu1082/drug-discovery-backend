@@ -38,20 +38,21 @@ Uploads a CSV file containing **drug discovery data**.
 **Endpoint:**  
 ```http
 POST https://your-api-gateway-url/prod/upload
+```
 
 **Request Example (Using cURL):**
 ```bash
 curl -X POST "https://your-api-gateway-url/prod/upload" \
      -H "Content-Type: text/csv" \
      --data-binary @drug-data.csv
-
+```
 **Response:**
 ```json
 {
   "message": "CSV uploaded successfully and stored in DynamoDB",
   "file": "drug_data_xxx.json"
 }
-
+```
 ### **2 Retrieve Stored Data**
 
 Retrieves the stored drug discovery data in JSON format.
@@ -59,11 +60,12 @@ Retrieves the stored drug discovery data in JSON format.
 **Endpoint:**
 ```http
 GET https://your-api-gateway-url/prod/data
+```
 
 **Request Example (Using cURL):**
 ```bash
 curl -X GET "https://your-api-gateway-url/prod/data"
-
+```
 **Response:**
 ```json
 [
@@ -78,7 +80,7 @@ curl -X GET "https://your-api-gateway-url/prod/data"
     "efficacy": "0.90"
   }
 ]
-
+```
 -----
 
 ## Implementation Details
@@ -127,7 +129,7 @@ def lambda_handler(event, context):
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})
         }
-
+```
 Retrieve Data Function (AWS Lambda)
 Fetches stored data from DynamoDB and returns it in JSON format.
 
@@ -154,30 +156,34 @@ def lambda_handler(event, context):
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})
         }
-
+```
 Deployment Steps
 Since the infrastructure was manually created, follow these steps:
 
 1️⃣ Create an S3 Bucket
 Manually create an S3 bucket:
 drug-discovery-data-bucket
+
 2️⃣ Create a DynamoDB Table
 Table Name: DrugDiscoveryData
 Primary Key: drug_name (String)
+
 3️⃣ Configure IAM Roles
 Ensure the Lambda function has permissions to:
-
 Write to S3 (s3:PutObject)
 Write to DynamoDB (dynamodb:PutItem)
 Read from DynamoDB (dynamodb:Scan)
+
 4️⃣ Create Lambda Functions
 Manually create two AWS Lambda functions:
-
 UploadCSVLambda – Handles CSV upload and storage.
 RetrieveDataLambda – Retrieves data from DynamoDB.
+
 5️⃣ Set Up API Gateway
 POST /upload → Calls UploadCSVLambda
 GET /data → Calls RetrieveDataLambda
+
+
 Testing & Validation
 1️⃣ Upload a CSV file using the API.
 2️⃣ Verify the file in S3 (drug-discovery-data-bucket).

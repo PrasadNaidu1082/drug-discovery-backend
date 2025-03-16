@@ -194,10 +194,8 @@ def lambda_handler(event, context):
 ```
 **Deployment Steps**
 
-Since the infrastructure was manually created, follow these steps:
-
 1️⃣ **Create an S3 Bucket**
-Manually create an S3 bucket:
+Create an S3 bucket:
 drug-discovery-data-bucket
 
 2️⃣ **Create a DynamoDB Table**

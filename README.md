@@ -186,8 +186,11 @@ GET /data → Calls RetrieveDataLambda
 
 Testing & Validation
 1️⃣ Upload a CSV file using the API.
+
 2️⃣ Verify the file in S3 (drug-discovery-data-bucket).
+
 3️⃣ Check stored data in DynamoDB (DrugDiscoveryData table).
+
 4️⃣ Retrieve the data using the GET API.
 
 

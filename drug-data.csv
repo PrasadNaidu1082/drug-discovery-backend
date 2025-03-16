@@ -1,0 +1,3 @@
+drug_name,target,efficacy
+Aspirin,COX-1,0.85
+Ibuprofen,COX-2,0.90

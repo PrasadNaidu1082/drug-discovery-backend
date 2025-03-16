@@ -93,6 +93,7 @@ import boto3
 import csv
 import json
 import base64
+import os
 
 s3 = boto3.client("s3")
 dynamodb = boto3.resource("dynamodb")
@@ -100,13 +101,38 @@ dynamodb = boto3.resource("dynamodb")
 BUCKET_NAME = "drug-discovery-data-bucket"
 TABLE_NAME = "DrugDiscoveryData"
 
+# Define required CSV headers
+REQUIRED_HEADERS = {"drug_name", "target", "efficacy"}
+
+def validate_csv_data(csv_data):
+    """ Validates CSV format and structure """
+    rows = csv_data.strip().split("\n")
+    csv_reader = csv.reader(rows)
+    header = next(csv_reader)
+
+    # Check if all required headers are present
+    if set(header) != REQUIRED_HEADERS:
+        raise ValueError(f"Invalid CSV format. Expected headers: {REQUIRED_HEADERS}, but got: {header}")
+
+    # Validate each row
+    for row in csv_reader:
+        if len(row) != len(header):  # Ensure no missing values
+            raise ValueError(f"Invalid row: {row}. Missing fields detected.")
+
+    return header  # Return header for further processing
+
 def lambda_handler(event, context):
     try:
-        # Decode CSV data
+        # Decode Base64 CSV data
         csv_data = base64.b64decode(event["body"]).decode("utf-8")
+
+        # Validate CSV
+        header = validate_csv_data(csv_data)
+
+        # Convert CSV string to JSON
         rows = csv_data.strip().split("\n")
         csv_reader = csv.reader(rows)
-        header = next(csv_reader)  # Read headers
+        next(csv_reader)  # Skip header since it's validated
 
         data = [dict(zip(header, row)) for row in csv_reader if row]
 
@@ -116,19 +142,28 @@ def lambda_handler(event, context):
 
         # Insert data into DynamoDB
         table = dynamodb.Table(TABLE_NAME)
-        for item in data:
-            table.put_item(Item=item)
+
+        with table.batch_writer() as batch:
+            for item in data:
+                batch.put_item(Item=item)  # Writing each row to DynamoDB efficiently
 
         return {
             "statusCode": 200,
             "body": json.dumps({"message": "CSV uploaded successfully and stored in DynamoDB", "file": file_name})
         }
 
+    except ValueError as ve:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": str(ve)})
+        }
+    
     except Exception as e:
         return {
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})
         }
+
 ```
 **Retrieve Data Function (AWS Lambda)**
 **Fetches stored data from DynamoDB and returns it in JSON format.**

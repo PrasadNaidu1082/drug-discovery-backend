@@ -157,6 +157,7 @@ def lambda_handler(event, context):
         }
 ```
 **Deployment Steps**
+
 Since the infrastructure was manually created, follow these steps:
 
 1️⃣ **Create an S3 Bucket**

@@ -15,6 +15,7 @@ The architecture follows a **serverless approach** using AWS services:
 - **AWS Lambda** - Handles CSV processing, data storage, and retrieval.
 - **Amazon S3** - Stores the uploaded CSV file as a JSON object.
 - **Amazon DynamoDB** - Stores structured drug discovery data.
+- **IAM Roles** - For secured access.
 
 ---
 

@@ -18,11 +18,13 @@ module "lambda" {
   retrieve_lambda_name   = var.retrieve_lambda_name
   bucket_name            = module.s3.bucket_name
   dynamodb_table_name    = module.dynamodb.dynamodb_table_name
+  lambda_role_name       = "drug_discovery_lambda_role"
+  region                 = var.region
 }
 
 module "api_gateway" {
   source               = "./modules/api_gateway"
   upload_lambda_arn    = module.lambda.upload_lambda_arn
   retrieve_lambda_arn  = module.lambda.retrieve_lambda_arn
+  api_gateway_name     = var.api_gateway_name
 }
-

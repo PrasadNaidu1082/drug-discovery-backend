@@ -1,0 +1,5 @@
+api_gateway_name = "drug-discovery-api"
+bucket_name = "drug-discovery-csv-bucket"
+dynamodb_table_name = "drug-discovery-data-table"
+retrieve_lambda_name = "retrieve-drug-data"
+upload_lambda_name = "upload-drug-data"

@@ -52,6 +52,13 @@ curl -X POST "https://your-api-gateway-url/prod/upload" \
   "message": "CSV uploaded successfully and stored in DynamoDB",
   "file": "drug_data_xxx.json"
 }
+
+--
+**Validation Errors:**
+```json
+{
+  "error": "Invalid CSV format. Expected headers: {'drug_name', 'target', 'efficacy'}"
+}
 ```
 ### **2. Retrieve Stored Data**
 
@@ -80,6 +87,12 @@ curl -X GET "https://your-api-gateway-url/prod/data"
     "efficacy": "0.90"
   }
 ]
+```
+**Errors:**
+```json
+{
+  "error": "Table not found"
+}
 ```
 -----
 
@@ -192,6 +205,16 @@ def lambda_handler(event, context):
             "body": json.dumps({"error": str(e)})
         }
 ```
+## Error Handling
+
+| Scenario                        | Error Message |
+|---------------------------------|------------------------------------------------|
+| Missing required headers in CSV | `"Invalid CSV format. Expected headers: {'drug_name', 'target', 'efficacy'}"` |
+| Missing fields in a row         | `"Invalid row: ['DrugA', 'ProteinX']. Missing fields detected."` |
+| S3 upload failure               | `"error": "S3 upload failed"` |
+| DynamoDB table not found        | `"error": "Table not found"` |
+| AWS service failure             | `"error": "Internal server error"` |
+
 **Deployment Steps**
 
 1️⃣ **Create an S3 Bucket**

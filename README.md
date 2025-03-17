@@ -52,8 +52,8 @@ curl -X POST "https://your-api-gateway-url/prod/upload" \
   "message": "CSV uploaded successfully and stored in DynamoDB",
   "file": "drug_data_xxx.json"
 }
+```
 
---
 **Validation Errors:**
 ```json
 {
